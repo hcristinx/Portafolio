@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Portafolio de trabajos | Krisya</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="css/examen.css" />
+
+    <!-- model-viewer -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    
+    <style>
+      /* Mini-estilos para que el model-viewer ocupe el recuadro */
+      #panel-imagen .image.is-2by3 { position: relative; height: 360px; }
+      #modelo-3d {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        border-radius: 6px;
+        background: #111;
+      }
+      #imagen-principal {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+        padding: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="pantalla_de_carga" style="height: 100vh">
+      <div class="columns is-gapless">
+        <!-- COLUMNA IZQUIERDA: grid de campeones -->
+        <div class="column is-three-quarters">
+          <!-- Fila superior -->
+          <div class="columns pt-6 mt-6">
+            <div class="column personaje" data-id="1" onclick="seleccionarPersonaje(1)">
+              <div class="cardup_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/jokerwip.jpg" alt="Joker" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="2" onclick="seleccionarPersonaje(2)">
+              <div class="cardup_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/kurt.jpg" alt="Kurt" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="3" onclick="seleccionarPersonaje(3)">
+              <div class="cardup_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/kirkwip.jpg" alt="Kirk" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="4" onclick="seleccionarPersonaje(4)">
+              <div class="cardup_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/exwip.jpg" alt="pat" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fila inferior -->
+          <div class="columns is-centered pb-6 pt-6">
+            <div class="column personaje" data-id="5" onclick="seleccionarPersonaje(5)">
+              <div class="carddown_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/pocelanawip.png" alt="porcelana" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="6" onclick="seleccionarPersonaje(6)">
+              <div class="carddown_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/hotcakes.jpg" alt="hotcakes" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="7" onclick="seleccionarPersonaje(7)">
+              <div class="carddown_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/tijeracloseup2.png" alt="tijera" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+
+            <div class="column personaje" data-id="8" onclick="seleccionarPersonaje(8)">
+              <div class="carddown_campeones">
+                <div class="tarjetita_entera">
+                  <figure class="image is-square">
+                    <img src="img/veilwip.jpg" alt="veil" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: panel de información -->
+        <div class="column is-one-quarter p-5">
+          <!-- Recuadro superior: nombre -->
+          <div class="box has-text-centered mb-3" id="panel-nombre">
+            <h2 class="title is-5 has-text-white">JOKER</h2>
+          </div>
+
+          <!-- Recuadro central: contenedor imagen + model-viewer -->
+          <div class="box has-text-centered mb-3" id="panel-imagen">
+            <figure class="image is-2by3" id="contenedor-imagen">
+              <!-- Imagen de respaldo -->
+              <img id="imagen-principal" src="img/joker.jpg" alt="Vista seleccionada" />
+              <!-- Model viewer (oculto hasta que haya model) -->
+              <model-viewer id="modelo-3d"
+                src=""
+                alt="Modelo 3D"
+                camera-controls
+                interaction-prompt="auto"
+                shadow-intensity="1"
+                touch-action="pan-y"
+                style="">
+              </model-viewer>
+            </figure>
+          </div>
+
+          <!-- Recuadro inferior: lore / descripción -->
+          <div class="box has-text-white" id="panel-lore">
+            <p class="is-size-7">El joker</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const personajes = [
+        { id: 1, nombre: "JOKER, 2020", imagen: "img/joker.jpg", descripcion: "Realicé este dibujo para mi tío, quien vivía en Estados Unidos y siempre ha sido una figura muy importante en mi vida. Lo extrañaba profundamente, y este retrato se convirtió en una forma de sentirlo cerca, de enviarle un pedazo de mí a través del arte." },
+        { id: 2, nombre: "KURT COBAIN, 2020", imagen: "img/Kurtcobain.jpg", descripcion: "Nació una tarde de aburrimiento y curiosidad. Acababa de comprar mis primeros lápices Prismacolor y quise experimentar con el color y la textura. Sin planearlo, terminé rindiendo homenaje a una figura que representa la rebeldía y la sensibilidad del arte." },
+        { id: 3, nombre: "KIRK HAMMETT, 2020", imagen: "img/kirk.jpeg", descripcion: "Durante mi adolescencia fui una gran fan de Metallica. Como aspirante a guitarrista, siempre admiré a Kirk Hammett. Este dibujo fue mi manera de agradecerle, a la distancia, por inspirarme a crear, a tocar y a sentir la música con intensidad." },
+        { id: 4, nombre: "PATRYK LECH, 2021", imagen: "img/ex.jpeg", descripcion: "Esta pieza fue un regalo para alguien que alguna vez ocupó un lugar muy importante en mi vida. Más que un retrato, es un recuerdo encapsulado en papel, una forma de agradecer por lo compartido y de cerrar un ciclo con cariño." },
+        { id: 5, nombre: "AGNES DUPONT, 2025", imagen: "img/porcelanarender.jpg", model: "models/agnes.glb", descripcion: "Mi proyecto final del segundo semestre de carrera. Agnes es completamente mía: la ideé, la diseñé, la modelé, la posé y la animé. Es el resultado de años de aprendizaje y pasión, una muestra tangible de mi evolución como artista digital" },
+        { id: 6, nombre: "HOT CAKES, 2025", imagen: "img/hotcakes.jpg", model: "models/hotcakes.glb", descripcion: "Ñam ñam." },
+        { id: 7, nombre: "TIJERA, 2025", imagen: "img/tijeracloseup4.png", model: "models/tijeritas.glb", descripcion: "Las Tijeras son el arma principal..." },
+        { id: 8, nombre: "VEIL, 2020", imagen: "img/veil.jpg", descripcion: "Esta obra marcó un antes y un después en mi desarrollo artístico. Representó mi punto de inflexión en el dominio del color, las texturas y el uso de los lápices de colores. Fue el proyecto con el que confirmé que el arte era mi camino." }
+      ];
+
+      function seleccionarPersonaje(id) {
+        const pj = personajes.find(p => p.id === id);
+        if (!pj) return;
+
+        // Elementos del panel derecho
+        const nombreEl = document.querySelector("#panel-nombre h2");
+        const loreEl = document.querySelector("#panel-lore p");
+        const imgEl = document.getElementById("imagen-principal");
+        const modelEl = document.getElementById("modelo-3d");
+
+        // Actualiza texto
+        nombreEl.textContent = pj.nombre || "";
+        loreEl.textContent = pj.descripcion || "";
+
+        // Si pj.model existe, mostramos 3D; si no, imagen
+        if (pj.model) {
+          imgEl.style.display = "none";
+          modelEl.style.display = "block";
+          // Forzar recarga en algunos navegadores
+          modelEl.removeAttribute("src");
+          modelEl.src = pj.model;
+
+          modelEl.addEventListener('load', () => console.log('Modelo cargado:', pj.model), { once: true });
+          modelEl.addEventListener('error', (e) => {
+            console.error('Error cargando modelo', e);
+            modelEl.style.display = "none";
+            imgEl.style.display = "block";
+          }, { once: true });
+
+        } else {
+          modelEl.style.display = "none";
+          imgEl.style.display = "block";
+          imgEl.src = pj.imagen || "";
+          imgEl.alt = pj.nombre || "";
+        }
+
+        // Resaltar miniatura seleccionada
+        document.querySelectorAll(".personaje").forEach(c => c.classList.remove("seleccionado"));
+        const seleccionado = document.querySelector(`.personaje[data-id="${id}"]`);
+        if (seleccionado) seleccionado.classList.add("seleccionado");
+      }
+
+      // Personaje por defecto
+      window.onload = () => seleccionarPersonaje(1);
+    </script>
+  </body>
+</html>
