@@ -136,15 +136,16 @@
               <!-- Imagen de respaldo -->
               <img id="imagen-principal" src="img/joker.jpg" alt="Vista seleccionada" />
               <!-- Model viewer (oculto hasta que haya model) -->
-              <model-viewer id="modelo-3d"
-                src=""
-                alt="Modelo 3D"
-                camera-controls
-                interaction-prompt="auto"
-                shadow-intensity="1"
-                touch-action="pan-y"
-                style="">
-              </model-viewer>
+              <model-viewer
+  id="modelo-3d"
+  src=""
+  alt="Modelo 3D"
+  camera-controls
+  interaction-prompt="auto"
+  shadow-intensity="1"
+  touch-action="pan-y"
+  style="width:100%; height:100%; display:none; border-radius:6px; background:#bd7f7f;">
+</model-viewer>
             </figure>
           </div>
 
@@ -187,8 +188,39 @@
           imgEl.style.display = "none";
           modelEl.style.display = "block";
           // Forzar recarga en algunos navegadores
-          modelEl.removeAttribute("src");
-          modelEl.src = pj.model;
+          // Mostrar 3D de forma robusta
+imgEl.style.display = "none";
+modelEl.style.display = "block";
+
+// Limpia src anterior y asigna con setAttribute (más fiable)
+try {
+  modelEl.removeAttribute('src');
+  // asignar con setAttribute en lugar de .src
+  modelEl.setAttribute('src', pj.model);
+
+  // Opcional: limpiar cualquier error previo y volver a añadir listeners
+  modelEl.removeEventListener('error', modelErrorHandler);
+  modelEl.removeEventListener('load', modelLoadHandler);
+
+  // Handlers reutilizables
+  function modelLoadHandler() {
+    console.log('Modelo cargado correctamente:', pj.model);
+  }
+  function modelErrorHandler(e) {
+    console.error('Error cargando modelo', e);
+    modelEl.style.display = 'none';
+    imgEl.style.display = 'block';
+  }
+
+  modelEl.addEventListener('load', modelLoadHandler, { once: true });
+  modelEl.addEventListener('error', modelErrorHandler, { once: true });
+
+} catch (err) {
+  console.error('Error al asignar modelo:', err);
+  modelEl.style.display = 'none';
+  imgEl.style.display = 'block';
+}
+
 
           modelEl.addEventListener('load', () => console.log('Modelo cargado:', pj.model), { once: true });
           modelEl.addEventListener('error', (e) => {
