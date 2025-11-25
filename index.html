@@ -1,128 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <title>Portafolio de trabajos | Krisya</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css" />
-    <link rel="stylesheet" href="css/examen.css" />
-
-    <!-- model-viewer -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
-      /* Mini-estilos para que el model-viewer ocupe el recuadro */
-      #panel-imagen .image.is-2by3 { position: relative; height: 360px; }
-      #modelo-3d {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        display: none;
-        border-radius: 6px;
-        background: #111;
-      }
-      #imagen-principal {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        border-radius: 6px;
-        padding: 8px;
-      }
+      :root { --panel-bg: rgba(60,60,80,0.7); --panel-radius: 6px; }
 
-      /* Fondo (correcto) */
+      html,body { height:100%; margin:0; font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
       .pantalla_de_carga {
         position: relative;
         background-image: url("img/fondo.jpg");
         background-size: cover;
         background-position: center;
-        width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
+        padding-top: 24px;
       }
 
-      .columns {
-        margin-left: 80px ;
-        margin-right: 60px ;
-        margin-top: 25px;
+      .columns { margin-left: 60px; margin-right: 60px; }
+
+      .cardup_campeones, .carddown_campeones { border: 5px solid transparent; border-radius: 6px; padding: 6px; background: rgba(255,255,255,0.02); }
+      .cardup_campeones { border-color: rgb(55,9,99); }
+      .carddown_campeones { border-color: rgb(137,105,0); }
+      .cardup_campeones img, .carddown_campeones img { width:100%; height:100%; object-fit:cover; display:block; border-radius:4px; }
+
+      .tarjetita_entera { position: relative; }
+
+      #panel-nombre, #panel-imagen, #panel-lore {
+        background: var(--panel-bg);
+        border-radius: var(--panel-radius);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       }
 
-      .cardup_campeones,
-      .carddown_campeones {
-        border: 6px;
-      }
+      #panel-nombre h2 { font-weight:300; color:#e8e8e8; margin:0.75rem 0; }
+      #panel-imagen .image.is-2by3 { position:relative; height:360px; }
+      #imagen-principal { width:100%; height:100%; object-fit:contain; border-radius:6px; padding:8px; display:block; background: rgba(80,80,100,0.12); }
+      #embed-container { position:absolute; inset:0; display:none; border-radius:6px; overflow:hidden; background:#111; }
+      #panel-lore { padding:1rem; color:#dcdcdc; font-size:0.95rem; font-family:"Segoe UI", "Open Sans", sans-serif; }
+      .personaje.seleccionado { outline: 3px solid rgba(255,255,255,0.06); border-radius:6px; }
 
-      .cardup_campeones {
-        border: 5px solid rgb(55, 9, 99);
-      }
+      /* Ajustes para iframes de Sketchfab para que ocupen área */
+      .sketchfab-embed-wrapper, .sketchfab-embed-wrapper iframe { width:100%; height:100%; border:0; display:block; }
+      .sketchfab-embed-wrapper { position:absolute; inset:0; }
+      .sketchfab-embed-wrapper p { position: absolute; bottom: 0; left: 0; margin: 6px; font-size:11px; color:#888; background: rgba(255,255,255,0.02); padding:4px 6px; border-radius:4px; }
 
-      .carddown_campeones {
-        border: 5px solid rgb(137, 105, 0);
-      }
-
-      .cardup_campeones img,
-      .carddown_campeones img {
-        object-fit: cover;
-        display: block;
-      }
-
-      .tarjetita_entera {
-        position: relative;
-      }
-
-      .descripcion {
-        position: absolute;
-        bottom: 0%;
-        left: 50%;
-        transform: translateX(-50%);
-        color:rgb(218, 218, 218);
-        font-weight: bold;
-        font-size: xx-small;
-        text-align: center;
-        z-index: 3;
-      }
-
-      /* Panel derecho */
-      #panel-nombre,
-      #panel-imagen,
-      #panel-lore {
-        background-color: rgba(60, 60, 80, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      }
-
-      /* Margen lateral para separar del borde derecho */
-      .column.is-one-quarter {
-        margin-right: 40px;
-      }
-
-      /* Nombre del personaje */
-      #panel-nombre h2 {
-        font-weight: 300;
-        letter-spacing: 1px;
-        color: #e8e8e8;
-      }
-
-      /* Imagen central */
-      #panel-imagen img {
-        object-fit: contain;
-        background-color: rgba(80, 80, 100, 0.4);
-        border-radius: 6px;
-        padding: 8px;
-      }
-
-      /* Texto del lore */
-      #panel-lore {
-        padding: 1rem;
-        line-height: 1.4;
-        color: #dcdcdc;
-        font-size: 0.9rem;
-        font-family: "Segoe UI", "Open Sans", sans-serif;
-      }
-
-      /* Margen general más equilibrado para el grid */
-      .pantalla_de_carga .columns {
-        margin-left: 60px;
-        margin-right: 60px;
+      
+      @media (max-width: 900px) {
+        .columns { margin-left: 16px; margin-right: 16px; }
+        #panel-imagen .image.is-2by3 { height: 240px; }
       }
     </style>
   </head>
@@ -130,256 +57,171 @@
   <body>
     <div class="pantalla_de_carga">
       <div class="columns is-gapless">
-        <!-- COLUMNA IZQUIERDA: grid de campeones -->
+        <!-- IZQUIERDA: miniaturas -->
         <div class="column is-three-quarters">
-          <!-- Fila superior -->
           <div class="columns pt-6 mt-6">
             <div class="column personaje" data-id="1" onclick="seleccionarPersonaje(1)">
-              <div class="cardup_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/jokerwip.jpg" alt="Joker" />
-                  </figure>
-                </div>
-              </div>
+              <div class="cardup_campeones tarjetita_entera"><figure class="image is-square"><img src="img/jokerwip.jpg" alt="Joker" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="2" onclick="seleccionarPersonaje(2)">
-              <div class="cardup_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/kurt.jpg" alt="Kurt" />
-                  </figure>
-                </div>
-              </div>
+              <div class="cardup_campeones tarjetita_entera"><figure class="image is-square"><img src="img/kurt.jpg" alt="Kurt" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="3" onclick="seleccionarPersonaje(3)">
-              <div class="cardup_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/kirkwip.jpg" alt="Kirk" />
-                  </figure>
-                </div>
-              </div>
+              <div class="cardup_campeones tarjetita_entera"><figure class="image is-square"><img src="img/kirkwip.jpg" alt="Kirk" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="4" onclick="seleccionarPersonaje(4)">
-              <div class="cardup_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/exwip.jpg" alt="pat" />
-                  </figure>
-                </div>
-              </div>
+              <div class="cardup_campeones tarjetita_entera"><figure class="image is-square"><img src="img/exwip.jpg" alt="Pat" /></figure></div>
             </div>
           </div>
 
-          <!-- Fila inferior -->
           <div class="columns is-centered pb-6 pt-6">
             <div class="column personaje" data-id="5" onclick="seleccionarPersonaje(5)">
-              <div class="carddown_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/pocelanawip.png" alt="porcelana" />
-                  </figure>
-                </div>
-              </div>
+              <div class="carddown_campeones tarjetita_entera"><figure class="image is-square"><img src="img/pocelanawip.png" alt="Porcelana" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="6" onclick="seleccionarPersonaje(6)">
-              <div class="carddown_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/hotcakes.jpg" alt="hotcakes" />
-                  </figure>
-                </div>
-              </div>
+              <div class="carddown_campeones tarjetita_entera"><figure class="image is-square"><img src="img/hotcakes.jpg" alt="Hotcakes" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="7" onclick="seleccionarPersonaje(7)">
-              <div class="carddown_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/tijeracloseup2.png" alt="tijera" />
-                  </figure>
-                </div>
-              </div>
+              <div class="carddown_campeones tarjetita_entera"><figure class="image is-square"><img src="img/tijeracloseup2.png" alt="Tijera" /></figure></div>
             </div>
 
             <div class="column personaje" data-id="8" onclick="seleccionarPersonaje(8)">
-              <div class="carddown_campeones">
-                <div class="tarjetita_entera">
-                  <figure class="image is-square">
-                    <img src="img/veilwip.jpg" alt="veil" />
-                  </figure>
-                </div>
-              </div>
+              <div class="carddown_campeones tarjetita_entera"><figure class="image is-square"><img src="img/veilwip.jpg" alt="Veil" /></figure></div>
             </div>
           </div>
         </div>
 
-        <!-- COLUMNA DERECHA: panel de información -->
+        <!-- DERECHA: panel -->
         <div class="column is-one-quarter p-5">
-          <!-- Recuadro superior: nombre -->
-          <div class="box has-text-centered mb-3" id="panel-nombre">
-            <h2 class="title is-5 has-text-white">JOKER</h2>
-          </div>
+          <div class="box has-text-centered mb-3" id="panel-nombre"><h2 class="title is-5 has-text-white">JOKER</h2></div>
 
-          <!-- Recuadro central: contenedor imagen + model-viewer -->
           <div class="box has-text-centered mb-3" id="panel-imagen">
             <figure class="image is-2by3" id="contenedor-imagen">
-              <!-- Imagen de respaldo -->
               <img id="imagen-principal" src="img/joker.jpg" alt="Vista seleccionada" />
-              <!-- Model viewer (oculto hasta que haya model) -->
-              <model-viewer
-                id="modelo-3d"
-                src=""
-                alt="Modelo 3D"
-                camera-controls
-                interaction-prompt="auto"
-                shadow-intensity="1"
-                touch-action="pan-y"
-                style="width:100%; height:100%; display:none; border-radius:6px; background:#bd7f7f;">
-              </model-viewer>
+              <div id="embed-container"></div>
             </figure>
           </div>
 
-          <!-- Recuadro inferior: lore / descripción -->
-          <div class="box has-text-white" id="panel-lore">
-            <p class="is-size-7">El joker</p>
-          </div>
+          <div class="box has-text-white" id="panel-lore"><p class="is-size-7" id="lore-text">El joker</p></div>
         </div>
       </div>
     </div>
 
     <script>
-      // Datos (mantengo las rutas tal como las pusiste)
+      
       const personajes = [
         { id: 1, nombre: "JOKER, 2020", imagen: "img/joker.jpg", descripcion: "Realicé este dibujo para mi tío..." },
         { id: 2, nombre: "KURT COBAIN, 2020", imagen: "img/Kurtcobain.jpg", descripcion: "Nació una tarde..." },
         { id: 3, nombre: "KIRK HAMMETT, 2020", imagen: "img/kirk.jpeg", descripcion: "Durante mi adolescencia..." },
         { id: 4, nombre: "PATRYK LECH, 2021", imagen: "img/ex.jpeg", descripcion: "Esta pieza fue un regalo..." },
-        { id: 5, nombre: "AGNES DUPONT, 2025", imagen: "img/porcelanarender.jpg", model: "models/agnes.glb", descripcion: "Mi proyecto final..." },
-        { id: 6, nombre: "HOT CAKES, 2025", imagen: "img/hotcakes.jpg", model: "models/hotcakes.glb", descripcion: "Ñam ñam." },
-        { id: 7, nombre: "TIJERA, 2025", imagen: "img/tijeracloseup4.png", model: "models/tijeritas.glb", descripcion: "Las Tijeras..." },
+
+        
+        {
+          id: 5,
+          nombre: "Dona, 2025",
+          imagen: "img/porcelanarender.jpg",
+          descripcion: "ñam ñam",
+          embed: `<div class="sketchfab-embed-wrapper">
+  <iframe title="Donut ñam ñam" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"
+    allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
+    src="https://sketchfab.com/models/7d54e64e76264687ae3af8ee14677d96/embed"></iframe>
+  <p><a href="https://sketchfab.com/3d-models/donut-nam-nam-7d54e64e76264687ae3af8ee14677d96" target="_blank" rel="nofollow">Donut ñam ñam</a> by <a href="https://sketchfab.com/jaldaby" target="_blank" rel="nofollow">jaldaby</a> on Sketchfab</p>
+</div>`
+        },
+
+       
+        {
+          id: 6,
+          nombre: "Hotcakes, 2025",
+          imagen: "img/hotcakes.jpg",
+          descripcion: "ñam ñam",
+          embed: `<div class="sketchfab-embed-wrapper">
+  <iframe title="Hotcakes" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"
+    allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
+    src="https://sketchfab.com/models/d0969c86a9a549c0aafd10a806e346e3/embed"></iframe>
+  <p><a href="https://sketchfab.com/3d-models/hotcakes-d0969c86a9a549c0aafd10a806e346e3" target="_blank" rel="nofollow">Hotcakes</a> by <a href="https://sketchfab.com/jaldaby" target="_blank" rel="nofollow">jaldaby</a> on Sketchfab</p>
+</div>`
+        },
+
+       
+        {
+          id: 7,
+          nombre: "TIJERA, 2025",
+          imagen: "img/tijeracloseup2.png",
+          descripcion: "Las Tijeras son el arma principal de Agnes Dupont, ...",
+          embed: `<div class="sketchfab-embed-wrapper">
+  <iframe title="Tijeritas" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true"
+    allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share
+    src="https://sketchfab.com/models/08ab716d598848f397e259ea3b34c097/embed"></iframe>
+  <p><a href="https://sketchfab.com/3d-models/tijeritas-08ab716d598848f397e259ea3b34c097" target="_blank" rel="nofollow">Tijeritas</a> by <a href="https://sketchfab.com/jaldaby" target="_blank" rel="nofollow">jaldaby</a> on Sketchfab</p>
+</div>`
+        },
+
         { id: 8, nombre: "VEIL, 2020", imagen: "img/veil.jpg", descripcion: "Esta obra marcó..." }
       ];
 
-      // Ruta local que subiste como fallback (el sistema puede mapear este path)
-      const FALLBACK_PATH = '/mnt/data/1ecebd4d-d0c3-46cf-8ed6-ee7e3acc9438.png';
+      // Fallback simple para imágenes rotas
+      const FALLBACK_IMG = 'img/fallback.png'; // cambia por el nombre real si lo subes
 
-      // Util: carga imagen con fallback si falla
-      function loadImageWithFallback(imgEl, url, name) {
-        if (!url) { imgEl.style.display = 'none'; return; }
-        const tester = new Image();
-        tester.onload = function() {
-          imgEl.src = url;
-          imgEl.style.display = 'block';
-        };
-        tester.onerror = function(err) {
-          console.warn('No se pudo cargar la imagen:', url, 'para', name, err);
-          imgEl.src = FALLBACK_PATH;
-          imgEl.style.display = 'block';
-        };
-        // para evitar caching en desarrollo podrías añadir '?v=' + Date.now()
-        tester.src = url;
+      function loadImage(imgEl, url) {
+        if (!url) { imgEl.src = FALLBACK_IMG; return; }
+        const tmp = new Image();
+        tmp.onload = () => { imgEl.src = url; imgEl.style.display = 'block'; };
+        tmp.onerror = () => { console.warn('imagen no cargó, usando fallback:', url); imgEl.src = FALLBACK_IMG; imgEl.style.display='block'; };
+        tmp.src = url;
       }
 
-      // Manejo robusto de model-viewer: asigna src y agrega listeners
-      function setModelSrc(modelEl, url, imgEl) {
-        if (!url) { modelEl.style.display = 'none'; imgEl.style.display = 'block'; return; }
-        // handlers
-        function modelLoadHandler() {
-          console.log('Modelo cargado correctamente:', url);
-          modelEl.style.display = 'block';
-          imgEl.style.display = 'none';
-        }
-        function modelErrorHandler(e) {
-          console.error('Error cargando modelo', url, e);
-          modelEl.style.display = 'none';
-          imgEl.style.display = 'block';
-        }
-
-        // limpiar listeners previos por si existen
-        modelEl.removeEventListener('load', modelLoadHandler);
-        modelEl.removeEventListener('error', modelErrorHandler);
-
-        try {
-          modelEl.removeAttribute('src');
-          modelEl.setAttribute('src', url);
-          modelEl.addEventListener('load', modelLoadHandler, { once: true });
-          modelEl.addEventListener('error', modelErrorHandler, { once: true });
-        } catch (err) {
-          console.error('Error asignando src a model-viewer:', err);
-          modelEl.style.display = 'none';
-          imgEl.style.display = 'block';
-        }
-      }
-
-      // Seleccionar personaje
       function seleccionarPersonaje(id) {
         const pj = personajes.find(p => p.id === id);
         if (!pj) return;
 
+        // elementos
         const nombreEl = document.querySelector("#panel-nombre h2");
-        const loreEl = document.querySelector("#panel-lore p");
+        const loreEl = document.getElementById("lore-text");
         const imgEl = document.getElementById("imagen-principal");
-        const modelEl = document.getElementById("modelo-3d");
+        const embedContainer = document.getElementById("embed-container");
 
+        // texto
         nombreEl.textContent = pj.nombre || "";
         loreEl.textContent = pj.descripcion || "";
 
-        if (pj.model) {
-          // mostrar model-viewer (intentar)
-          loadImageWithFallback(imgEl, pj.imagen || '', pj.nombre || '');
-          setModelSrc(modelEl, pj.model, imgEl);
+        // limpiar embed container
+        embedContainer.innerHTML = '';
+        embedContainer.style.display = 'none';
+
+        // si tiene embed, mostramos iframe; si no, mostramos imagen
+        if (pj.embed) {
+          imgEl.style.display = 'none';
+          embedContainer.innerHTML = pj.embed;
+          embedContainer.style.display = 'block';
         } else {
-          // solo imagen
-          modelEl.style.display = 'none';
-          loadImageWithFallback(imgEl, pj.imagen || '', pj.nombre || '');
-          imgEl.alt = pj.nombre || "";
+          // imagen principal
+          loadImage(imgEl, pj.imagen || '');
+          imgEl.style.display = 'block';
         }
 
-        // resaltar miniatura seleccionada (simple)
-        document.querySelectorAll(".personaje").forEach(c => c.classList.remove("seleccionado"));
-        const seleccionado = document.querySelector(`.personaje[data-id="${id}"]`);
-        if (seleccionado) seleccionado.classList.add("seleccionado");
+        // resaltar miniatura
+        document.querySelectorAll('.personaje').forEach(n => n.classList.toggle('seleccionado', Number(n.dataset.id) === id));
       }
 
-      // Comprueba todas las imágenes <img> y muestra status en consola (útil para debug)
-      function checkImages() {
-        document.querySelectorAll('img').forEach(img => {
-          const url = img.src;
-          fetch(url, { method: 'GET', cache: 'no-store' })
-            .then(async res => {
-              console.log('IMG CHECK:', url, '=> status', res.status, 'content-type', res.headers.get('content-type'));
-              if (res.status !== 200) {
-                console.warn('>>> IMAGE NOT LOADING:', url);
-              } else if (!res.headers.get('content-type')?.includes('image')) {
-                console.warn('>>> RESPONSE IS NOT AN IMAGE (preview):', url);
-                const text = await res.text();
-                console.log(text.slice(0,200));
-              }
-            })
-            .catch(err => console.error('fetch error for', url, err));
-        });
-      }
-
-      // on ready
-      document.addEventListener('DOMContentLoaded', function() {
-        // cargar miniaturas con fallback (para que no se vean rotas)
+      // DOM ready
+      document.addEventListener('DOMContentLoaded', () => {
+        // cargar miniaturas (evita imagen rota)
         document.querySelectorAll('.tarjetita_entera img').forEach(img => {
-          loadImageWithFallback(img, img.getAttribute('src'), img.alt || 'miniatura');
+          const src = img.getAttribute('src');
+          loadImage(img, src);
         });
-        // cargar la imagen principal (por defecto personaje 1)
-        loadImageWithFallback(document.getElementById('imagen-principal'), 'img/joker.jpg', 'Joker');
 
-        // init seleccion default
+        // imagen principal por defecto
+        loadImage(document.getElementById('imagen-principal'), 'img/joker.jpg');
+
+        // seleccionar 1 por defecto
         seleccionarPersonaje(1);
-
-        // imprime en consola el estado de las imágenes (útil para depuración)
-        checkImages();
       });
     </script>
   </body>
