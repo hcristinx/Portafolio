@@ -169,7 +169,7 @@
       const FALLBACK_IMG = 'img/fallback.png'; // cambia por el nombre real si lo subes
 
       function loadImage(imgEl, url) {
-        if (!url) { imgEl.src = FALLBACK_IMG; return; }
+        //if (!url) { imgEl.src = FALLBACK_IMG; return; }
         const tmp = new Image();
         tmp.onload = () => { imgEl.src = url; imgEl.style.display = 'block'; };
         tmp.onerror = () => { console.warn('imagen no cargó, usando fallback:', url); imgEl.src = FALLBACK_IMG; imgEl.style.display='block'; };
